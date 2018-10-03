@@ -1,0 +1,204 @@
+namespace Praktikum_1
+{
+	/// <summary>
+	/// Description of LinkList.
+	/// </summary>
+	public class LinkedList
+	{
+		public Node Head;
+		public Node Tail;
+		
+		public bool isEmpty() 
+		{
+			return Head == null;
+		}
+		public void add (Node Baru) 
+		{
+			if(isEmpty()){
+				Head = Baru;
+				Tail = Baru;
+			}
+			else{
+				Tail.Next = Baru;
+				Tail = Baru;
+			}
+		}
+		
+		public int Size() 
+        { 
+            // cek jika linked list kosong maka return size 0 
+            if (isEmpty()){
+            	return  0;
+            }
+            // lakukan traversal untuk menghitung jumlah node 
+            // Buat node penghitung mulai dari head
+			int size = 1;
+			Node hitung = Head;
+            while(hitung.Next != null) 
+            { 
+            	hitung = hitung.Next;
+                // pindah node penghitung ke node selanjutnya 
+                // increment size 
+                size++;
+            } 
+ 
+            return size;             
+        }
+		
+		
+		public Node GetNode (int posisi) {			
+			if(isEmpty()){
+				return null;
+			}
+			if(posisi < 0 || posisi > Size() ){ 
+				return null;
+			}
+			int currentPos = 0;
+			Node counter = Head;
+			while(currentPos != posisi) {
+				currentPos++;
+				counter = counter.Next;
+			}
+			return counter;
+		}
+		public void Add(int posisi, Node baru) 
+        { 
+        
+                    // dapatkan Node di posisi sebelumnya                     
+                    
+                    if (isEmpty())
+                    { 
+                    	/** jika list dalam keadaan kosong **/ 
+               			// abaikan posisi, langsung masukkan sebagai Head dan Tail
+                    	this.add(baru);
+                    	Head = baru;
+                    	Tail = baru;
+                     } 
+                                
+                         
+                    if (posisi == 1)  {
+                        	/** sebaliknya jika list tidak kosong **/ 
+                  		 // jika posisi = 1 tambahkan sebagai Head
+                        	baru.Next = GetNode(posisi);
+							Head = baru;                
+                        }
+                        	 
+
+                    // pastikan node di posisi sebelumnya ada
+                    else if (GetNode(posisi - 1) != null ) 
+                    { 
+                        // tambahkan node baru di belakang list
+						Node tmpSebelumPosisi = this.GetNode(posisi - 1);
+						Node tmpPosisi = this.GetNode(posisi);
+						tmpSebelumPosisi.Next = baru;
+						baru.Next = tmpPosisi;
+						
+						// jika before merupakan Tail, maka node baru menjadi Tail
+						if (this.GetNode(posisi - 1) == Tail)
+						{
+						Node tmpSebelumTail = Tail;
+						tmpSebelumTail.Next = baru;
+						Tail = baru;
+						}						
+                    } 
+                    else 
+                    {
+                    	Node getTail = Tail;
+						getTail.Next = baru;
+						Tail = baru;	
+                    }
+               
+        } 
+  
+        public String DisplayList()
+		{
+			//string data = penghitung;
+			Node penghitung = Head;
+			String data = "";
+			while (penghitung != null)
+			{
+				data = data + penghitung.Data + "-";
+				penghitung = penghitung.Next;
+			}
+			data = data + ""+"x ";
+			return data;
+
+		}
+
+
+		/// <summary>
+		/// Digunakan untuk mendapatkan posisi node di dalam linked list yang memiliki
+		/// nilai data yang dicari.
+		/// </summary>
+		/// <param name="data">Nilai data yang ingin ditemukan dalam linkedlist</param>
+		/// <returns>Posisi node yang memiliki nilai data yang dicari. Mengembalikan 0
+		/// jika tidak ditemukan.</returns>
+		public int Contains(int data)
+		{
+			// cek bila linked list kosong, return 0
+			if (isEmpty())
+			{
+				return 0;
+			}
+			// kunjungi node mulai dari Head
+			// geser terus hingga node yang memiliki nilai data sama ditemukan atau
+			// sudah mencapai akhir linked list
+			Node counter = Head;
+			int posisi = 1;
+
+			while (counter != null)
+			{
+				// geser ke node selanjutnya
+				if (counter.Data == data)
+				{
+					break;
+				}
+				counter = counter.Next;
+				posisi++;
+			}
+			// jika tidak ditemukan return 0
+			if (posisi > Size())
+			{
+				return 0;
+			}
+
+			return posisi;
+
+		}
+
+        /// <summary>
+        /// Menghapus node pada posisi yang dicari
+        /// </summary>
+        /// <returns>Mengembalikan NOde yang dihapus.Null jika node pada posisi yang ditentukan tidak ada</returns>
+        /// <param name="posisi">Posisi yaitu nilai posisi elemen dari 1</param>
+		public Node Remove(int posisi){
+			//cek jika posisi tidak valid maka return Null
+			if(posisi<1 || posisi>this.Size()){
+				return null;
+			}
+			else {
+				Node hapusNode = null;
+				if (posisi==1){
+					hapusNode = Head;
+					Head = Head.Next;
+
+				} else {
+					hapusNode = GetNode(posisi);
+					GetNode(posisi - 1).Next = hapusNode.Next;
+					if (GetNode(posisi) == Tail){
+						hapusNode = Tail;
+						Tail = GetNode(posisi - 1);
+					}
+				}
+
+				return hapusNode;
+			}
+
+
+		}
+
+
+	}
+		
+		
+}
